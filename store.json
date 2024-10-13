@@ -1,0 +1,421 @@
+[
+    {
+        "storeId": "1",
+        "storeName": "幸福堂",
+        "menu": [
+            {
+                "productId": "101",
+                "productName": "珍珠奶茶",
+                "description": "經典的珍珠奶茶，Q彈珍珠搭配香醇奶茶",
+                "imageUrl": "https://example.com/pearl_milk_tea.jpg",
+                "priceSetting": [
+                    {
+                        "conditions": [
+                            {
+                                "size": "中"
+                            }
+                        ],
+                        "price": 50
+                    },
+                    {
+                        "conditions": [
+                            {
+                                "size": "大"
+                            }
+                        ],
+                        "price": 60
+                    }
+                ],
+                "options": [
+                    {
+                        "optionName": "size",
+                        "optionValue": [
+                            "中",
+                            "大"
+                        ]
+                    },
+                    {
+                        "optionName": "ice",
+                        "optionValue": [
+                            "正常冰",
+                            "少冰",
+                            "去冰"
+                        ]
+                    },
+                    {
+                        "optionName": "sugar",
+                        "optionValue": [
+                            "正常糖",
+                            "半糖",
+                            "少糖",
+                            "無糖"
+                        ]
+                    }
+                ]
+            },
+            {
+                "productId": "102",
+                "productName": "芋圓奶茶",
+                "description": "香甜芋圓與奶茶的絕配",
+                "imageUrl": "https://example.com/taro_milk_tea.jpg",
+                "priceSetting": [
+                    {
+                        "conditions": [
+                            {
+                                "size": "中"
+                            }
+                        ],
+                        "price": 55
+                    },
+                    {
+                        "conditions": [
+                            {
+                                "size": "大"
+                            }
+                        ],
+                        "price": 65
+                    }
+                ],
+                "options": [
+                    {
+                        "optionName": "size",
+                        "optionValue": [
+                            "中",
+                            "大"
+                        ]
+                    },
+                    {
+                        "optionName": "ice",
+                        "optionValue": [
+                            "正常冰",
+                            "少冰",
+                            "去冰"
+                        ]
+                    },
+                    {
+                        "optionName": "sugar",
+                        "optionValue": [
+                            "正常糖",
+                            "半糖",
+                            "少糖",
+                            "無糖"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "storeId": "2",
+        "storeName": "五十嵐",
+        "menu": [
+            {
+                "productId": "201",
+                "productName": "紅茶拿鐵",
+                "description": "香醇紅茶與濃郁鮮奶的完美結合",
+                "imageUrl": "https://example.com/black_tea_latte.jpg",
+                "priceSetting": [
+                    {
+                        "conditions": [
+                            {
+                                "size": "中"
+                            }
+                        ],
+                        "price": 45
+                    },
+                    {
+                        "conditions": [
+                            {
+                                "size": "大"
+                            }
+                        ],
+                        "price": 55
+                    }
+                ],
+                "options": [
+                    {
+                        "optionName": "size",
+                        "optionValue": [
+                            "中",
+                            "大"
+                        ]
+                    },
+                    {
+                        "optionName": "ice",
+                        "optionValue": [
+                            "正常冰",
+                            "少冰",
+                            "去冰"
+                        ]
+                    },
+                    {
+                        "optionName": "sugar",
+                        "optionValue": [
+                            "正常糖",
+                            "半糖",
+                            "少糖",
+                            "無糖"
+                        ]
+                    }
+                ]
+            },
+            {
+                "productId": "202",
+                "productName": "抹茶拿鐵",
+                "description": "日式抹茶與鮮奶的和諧融合",
+                "imageUrl": "https://example.com/matcha_latte.jpg",
+                "priceSetting": [
+                    {
+                        "conditions": [
+                            {
+                                "size": "中"
+                            }
+                        ],
+                        "price": 50
+                    },
+                    {
+                        "conditions": [
+                            {
+                                "size": "大"
+                            }
+                        ],
+                        "price": 60
+                    }
+                ],
+                "options": [
+                    {
+                        "optionName": "size",
+                        "optionValue": [
+                            "中",
+                            "大"
+                        ]
+                    },
+                    {
+                        "optionName": "ice",
+                        "optionValue": [
+                            "正常冰",
+                            "少冰",
+                            "去冰"
+                        ]
+                    },
+                    {
+                        "optionName": "sugar",
+                        "optionValue": [
+                            "正常糖",
+                            "半糖",
+                            "少糖",
+                            "無糖"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "storeId": "3",
+        "storeName": "清玉",
+        "menu": [
+            {
+                "productId": "301",
+                "productName": "四季春青茶",
+                "description": "清爽香醇的四季春茶，回甘持久",
+                "imageUrl": "https://example.com/four_seasons_tea.jpg",
+                "priceSetting": [
+                    {
+                        "conditions": [
+                            {
+                                "size": "中"
+                            }
+                        ],
+                        "price": 25
+                    },
+                    {
+                        "conditions": [
+                            {
+                                "size": "大"
+                            }
+                        ],
+                        "price": 30
+                    }
+                ],
+                "options": [
+                    {
+                        "optionName": "size",
+                        "optionValue": [
+                            "中",
+                            "大"
+                        ]
+                    },
+                    {
+                        "optionName": "ice",
+                        "optionValue": [
+                            "正常冰",
+                            "少冰",
+                            "去冰",
+                            "溫",
+                            "熱"
+                        ]
+                    },
+                    {
+                        "optionName": "sugar",
+                        "optionValue": [
+                            "正常糖",
+                            "半糖",
+                            "少糖",
+                            "無糖"
+                        ]
+                    }
+                ]
+            },
+            {
+                "productId": "302",
+                "productName": "檸檬綠茶",
+                "description": "新鮮檸檬與清香綠茶的完美調和",
+                "imageUrl": "https://example.com/lemon_green_tea.jpg",
+                "priceSetting": [
+                    {
+                        "conditions": [
+                            {
+                                "size": "中"
+                            }
+                        ],
+                        "price": 35
+                    },
+                    {
+                        "conditions": [
+                            {
+                                "size": "大"
+                            }
+                        ],
+                        "price": 45
+                    }
+                ],
+                "options": [
+                    {
+                        "optionName": "size",
+                        "optionValue": [
+                            "中",
+                            "大"
+                        ]
+                    },
+                    {
+                        "optionName": "ice",
+                        "optionValue": [
+                            "正常冰",
+                            "少冰",
+                            "去冰"
+                        ]
+                    },
+                    {
+                        "optionName": "sugar",
+                        "optionValue": [
+                            "正常糖",
+                            "半糖",
+                            "少糖",
+                            "無糖"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "storeId": "4",
+        "storeName": "麻古茶坊",
+        "menu": [
+            {
+                "productId": "401",
+                "productName": "鮮奶茶",
+                "description": "使用高品質鮮奶，口感滑順香濃",
+                "imageUrl": "https://example.com/fresh_milk_tea.jpg",
+                "priceSetting": [
+                    {
+                        "conditions": [
+                            {
+                                "size": "中"
+                            }
+                        ],
+                        "price": 50
+                    },
+                    {
+                        "conditions": [
+                            {
+                                "size": "大"
+                            }
+                        ],
+                        "price": 65
+                    }
+                ],
+                "options": [
+                    {
+                        "optionName": "size",
+                        "optionValue": [
+                            "中",
+                            "大"
+                        ]
+                    },
+                    {
+                        "optionName": "ice",
+                        "optionValue": [
+                            "正常冰",
+                            "少冰",
+                            "去冰",
+                            "溫",
+                            "熱"
+                        ]
+                    },
+                    {
+                        "optionName": "sugar",
+                        "optionValue": [
+                            "正常糖",
+                            "半糖",
+                            "少糖",
+                            "無糖"
+                        ]
+                    }
+                ]
+            },
+            {
+                "productId": "402",
+                "productName": "芒果冰沙",
+                "description": "新鮮芒果打製，香甜清爽",
+                "imageUrl": "https://example.com/mango_smoothie.jpg",
+                "priceSetting": [
+                    {
+                        "conditions": [
+                            {
+                                "size": "中"
+                            }
+                        ],
+                        "price": 65
+                    },
+                    {
+                        "conditions": [
+                            {
+                                "size": "大"
+                            }
+                        ],
+                        "price": 80
+                    }
+                ],
+                "options": [
+                    {
+                        "optionName": "size",
+                        "optionValue": [
+                            "中",
+                            "大"
+                        ]
+                    },
+                    {
+                        "optionName": "sugar",
+                        "optionValue": [
+                            "正常糖",
+                            "半糖",
+                            "少糖"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
