@@ -18,7 +18,49 @@ from .models import (
 # Load environment variables
 load_dotenv()
 
-app = FastAPI()
+# Initialize FastAPI with metadata for Swagger UI
+app = FastAPI(
+    title="Menu2What API",
+    description="""
+    一個將菜單圖片轉換為結構化點餐系統的 API 服務。
+    
+    ## 功能
+    * 上傳菜單圖片自動識別商品
+    * 創建臨時性商店
+    * 管理訂單流程
+    * 用戶認證
+    
+    ## 使用流程
+    1. 店主註冊並登入
+    2. 上傳菜單圖片
+    3. 系統自動生成商店頁面
+    4. 分享商店連結給買家
+    5. 買家下單
+    6. 店主管理訂單
+    """,
+    version="1.0.0",
+    contact={
+        "name": "Your Name",
+        "email": "your.email@example.com",
+    },
+    license_info={
+        "name": "MIT",
+    },
+    openapi_tags=[
+        {
+            "name": "users",
+            "description": "用戶註冊和認證",
+        },
+        {
+            "name": "stores",
+            "description": "商店和菜單管理",
+        },
+        {
+            "name": "orders",
+            "description": "訂單處理和管理",
+        },
+    ]
+)
 
 # Security
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-here")
@@ -60,8 +102,17 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-@app.post("/register", response_model=User)
+@app.post("/register", response_model=User, tags=["users"])
 async def register_user(user: UserCreate):
+    """
+    註冊新用戶
+    
+    - **email**: 用戶電子郵件
+    - **name**: 用戶名稱
+    - **password**: 用戶密碼
+    
+    返回創建的用戶資訊（不含密碼）
+    """
     if user.email in [u.email for u in users.values()]:
         raise HTTPException(
             status_code=400,
@@ -81,8 +132,16 @@ async def register_user(user: UserCreate):
     
     return db_user
 
-@app.post("/token")
+@app.post("/token", tags=["users"])
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    """
+    用戶登入並獲取訪問令牌
+    
+    - **username**: 用戶電子郵件
+    - **password**: 用戶密碼
+    
+    返回 JWT 訪問令牌
+    """
     user = None
     for u in users.values():
         if u["email"] == form_data.username:
@@ -100,13 +159,23 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/upload-menu")
+@app.post("/upload-menu", tags=["stores"])
 async def upload_menu(
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user)
 ):
     """
-    Upload a menu image and process it to extract menu items
+    上傳菜單圖片並創建商店
+    
+    - **file**: 菜單圖片文件（支持 jpg、png）
+    
+    系統會自動：
+    1. 分析圖片內容
+    2. 提取菜品信息
+    3. 創建臨時商店
+    4. 生成分享連結
+    
+    需要用戶認證。
     """
     try:
         # Read the image file
@@ -174,7 +243,7 @@ async def upload_menu(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing menu: {str(e)}")
 
-@app.get("/stores")
+@app.get("/stores", tags=["stores"])
 async def get_stores(current_user: User = Depends(get_current_user)):
     """
     Get list of all stores owned by the current user
@@ -185,7 +254,7 @@ async def get_stores(current_user: User = Depends(get_current_user)):
     ]
     return user_stores
 
-@app.get("/store/{store_id}")
+@app.get("/store/{store_id}", tags=["stores"])
 async def get_store(store_id: str):
     """
     Get menu for a specific store (public endpoint)
@@ -199,10 +268,19 @@ async def get_store(store_id: str):
     
     return store
 
-@app.post("/store/{store_id}/order")
+@app.post("/store/{store_id}/order", tags=["orders"])
 async def create_order(store_id: str, order: OrderCreate):
     """
-    Create a new order (public endpoint)
+    在指定商店創建新訂單
+    
+    - **store_id**: 商店ID
+    - **order**: 訂單信息，包含：
+      - 商品列表（名稱、數量）
+      - 買家姓名
+      - 聯絡方式
+      - 備註（可選）
+    
+    無需用戶認證，任何人都可以下單。
     """
     if store_id not in stores:
         raise HTTPException(status_code=404, detail="Store not found")
@@ -242,7 +320,7 @@ async def create_order(store_id: str, order: OrderCreate):
     orders[order_id] = new_order
     return new_order
 
-@app.get("/store/{store_id}/orders")
+@app.get("/store/{store_id}/orders", tags=["orders"])
 async def get_store_orders(
     store_id: str,
     current_user: User = Depends(get_current_user)
@@ -263,7 +341,7 @@ async def get_store_orders(
     ]
     return store_orders
 
-@app.put("/store/{store_id}/order/{order_id}")
+@app.put("/store/{store_id}/order/{order_id}", tags=["orders"])
 async def update_order_status(
     store_id: str,
     order_id: str,
