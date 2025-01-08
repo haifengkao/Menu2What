@@ -11,7 +11,7 @@ import uuid
 from passlib.context import CryptContext
 from jose import jwt
 from .models import (
-    User, UserCreate, Store, MenuItem, Order, 
+    User, UserCreate, Store, MenuItem, Order,
     OrderCreate, OrderStatus, OrderItem
 )
 
@@ -23,13 +23,13 @@ app = FastAPI(
     title="Menu2What API",
     description="""
     一個將菜單圖片轉換為結構化點餐系統的 API 服務。
-    
+
     ## 功能
     * 上傳菜單圖片自動識別商品
     * 創建臨時性商店
     * 管理訂單流程
     * 用戶認證
-    
+
     ## 使用流程
     1. 店主註冊並登入
     2. 上傳菜單圖片
@@ -106,11 +106,11 @@ def create_access_token(data: dict):
 async def register_user(user: UserCreate):
     """
     註冊新用戶
-    
+
     - **email**: 用戶電子郵件
     - **name**: 用戶名稱
     - **password**: 用戶密碼
-    
+
     返回創建的用戶資訊（不含密碼）
     """
     if user.email in [u.email for u in users.values()]:
@@ -118,10 +118,10 @@ async def register_user(user: UserCreate):
             status_code=400,
             detail="Email already registered"
         )
-    
+
     user_id = str(uuid.uuid4())
     hashed_password = pwd_context.hash(user.password)
-    
+
     db_user = User(
         id=user_id,
         email=user.email,
@@ -129,17 +129,17 @@ async def register_user(user: UserCreate):
         created_at=datetime.utcnow()
     )
     users[user_id] = {**db_user.dict(), "hashed_password": hashed_password}
-    
+
     return db_user
 
 @app.post("/token", tags=["users"])
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     用戶登入並獲取訪問令牌
-    
+
     - **username**: 用戶電子郵件
     - **password**: 用戶密碼
-    
+
     返回 JWT 訪問令牌
     """
     user = None
@@ -147,13 +147,13 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         if u["email"] == form_data.username:
             user = u
             break
-    
+
     if not user or not pwd_context.verify(form_data.password, user["hashed_password"]):
         raise HTTPException(
             status_code=400,
             detail="Incorrect email or password"
         )
-    
+
     access_token = create_access_token(
         data={"sub": user["id"]}
     )
@@ -166,24 +166,24 @@ async def upload_menu(
 ):
     """
     上傳菜單圖片並創建商店
-    
+
     - **file**: 菜單圖片文件（支持 jpg、png）
-    
+
     系統會自動：
     1. 分析圖片內容
     2. 提取菜品信息
     3. 創建臨時商店
     4. 生成分享連結
-    
+
     需要用戶認證。
     """
     try:
         # Read the image file
         image_content = await file.read()
-        
+
         # Encode the image to base64
         base64_image = base64.b64encode(image_content).decode('utf-8')
-        
+
         # Call OpenAI Vision API to analyze the menu
         response = client.chat.completions.create(
             model="gpt-4-vision-preview",
@@ -217,10 +217,10 @@ async def upload_menu(
             ],
             max_tokens=1500
         )
-        
+
         # Parse the response
         menu_data = json.loads(response.choices[0].message.content)
-        
+
         # Create store
         store_id = str(uuid.uuid4())
         store = Store(
@@ -232,14 +232,14 @@ async def upload_menu(
             expires_at=datetime.utcnow() + timedelta(days=7),  # Store expires in 7 days
             share_url=f"/store/{store_id}"
         )
-        
+
         stores[store_id] = store
-        
+
         return {
             "message": "Menu processed successfully",
             "store": store
         }
-            
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing menu: {str(e)}")
 
@@ -261,34 +261,34 @@ async def get_store(store_id: str):
     """
     if store_id not in stores:
         raise HTTPException(status_code=404, detail="Store not found")
-    
+
     store = stores[store_id]
     if not store.is_active or (store.expires_at and store.expires_at < datetime.utcnow()):
         raise HTTPException(status_code=404, detail="Store has expired or is inactive")
-    
+
     return store
 
 @app.post("/store/{store_id}/order", tags=["orders"])
 async def create_order(store_id: str, order: OrderCreate):
     """
     在指定商店創建新訂單
-    
+
     - **store_id**: 商店ID
     - **order**: 訂單信息，包含：
       - 商品列表（名稱、數量）
       - 買家姓名
       - 聯絡方式
       - 備註（可選）
-    
+
     無需用戶認證，任何人都可以下單。
     """
     if store_id not in stores:
         raise HTTPException(status_code=404, detail="Store not found")
-    
+
     store = stores[store_id]
     if not store.is_active or (store.expires_at and store.expires_at < datetime.utcnow()):
         raise HTTPException(status_code=404, detail="Store has expired or is inactive")
-    
+
     # Calculate total amount
     total_amount = 0
     for item in order.items:
@@ -302,7 +302,7 @@ async def create_order(store_id: str, order: OrderCreate):
                 detail=f"Menu item not found: {item.menu_item_name}"
             )
         total_amount += menu_item.price * item.quantity
-    
+
     # Create order
     order_id = str(uuid.uuid4())
     new_order = Order(
@@ -316,7 +316,7 @@ async def create_order(store_id: str, order: OrderCreate):
         created_at=datetime.utcnow(),
         notes=order.notes
     )
-    
+
     orders[order_id] = new_order
     return new_order
 
@@ -330,11 +330,11 @@ async def get_store_orders(
     """
     if store_id not in stores:
         raise HTTPException(status_code=404, detail="Store not found")
-    
+
     store = stores[store_id]
     if store.owner_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to view these orders")
-    
+
     store_orders = [
         order for order in orders.values()
         if order.store_id == store_id
@@ -353,14 +353,14 @@ async def update_order_status(
     """
     if store_id not in stores or order_id not in orders:
         raise HTTPException(status_code=404, detail="Store or order not found")
-    
+
     store = stores[store_id]
     if store.owner_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to update this order")
-    
+
     order = orders[order_id]
     if order.store_id != store_id:
         raise HTTPException(status_code=400, detail="Order does not belong to this store")
-    
+
     order.status = status
     return order
