@@ -9,7 +9,7 @@ import os
 from dotenv import load_dotenv
 import uuid
 from passlib.context import CryptContext
-import jwt
+from jose import jwt
 from .models import (
     User, UserCreate, Store, MenuItem, Order, 
     OrderCreate, OrderStatus, OrderItem
